@@ -47,12 +47,10 @@ def stock_view(request): # Define a stock_view function that takes a request and
     df['Next_Close'] = df['Adj Close'].shift(-1) # The next day's closing price
 
     # Drop the last row as it has a missing value
-    df.interpolate(method='spline', order=3, inplace=True)
-
-    # df.drop('Adj Close', axis=1, inplace=True)
+    df.dropna(inplace=True)
 
     # Define the features and the target
-    X = df[['Open', 'High', 'Low', 'Close', 'Volume']] # You can add more features if you want
+    X = df[['Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume']] # You can add more features if you want
     y = df['Next_Close']
 
     # Split the data into train and test sets
@@ -71,19 +69,10 @@ def stock_view(request): # Define a stock_view function that takes a request and
     rmse = np.sqrt(mse)
     r2 = r2_score(y_test, y_pred)
 
-    # Create predictor variables for the future dates using linear interpolation
-    future_dates = pd.date_range(start=df.index[-1] + pd.Timedelta(days=1), periods=days, freq='D')  # Generate future dates
-    future_X = pd.DataFrame(index=future_dates, columns=X.columns)  # Create an empty dataframe with the same columns as X
-    future_X['Open'] = np.interp(future_dates, df.index, df['Open'])  # Interpolate the open prices using the existing data
-    future_X['High'] = np.interp(future_dates, df.index, df['High'])  # Interpolate the high prices using the existing data
-    future_X['Low'] = np.interp(future_dates, df.index, df['Low'])  # Interpolate the low prices using the existing data
-    future_X['Close'] = np.interp(future_dates, df.index, df['Close'])  # Interpolate the close prices using the existing data
-    future_X['Volume'] = np.interp(future_dates, df.index, df['Volume'])  # Interpolate the volume using the existing data
-
     # Predict the closing price for the next n days using the model
-    n = days + 1  # Add one more day for the initial investment
-    X_new = pd.concat([X.tail(1), future_X])  # Concatenate the last row of X and future_X
-    y_new = model.predict(X_new)  # Predict the next n closing prices
+    n = days + 1 # Add one more day for the initial investment
+    X_new = df[['Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume']].tail(n) # Get the last n rows of features
+    y_new = model.predict(X_new) # Predict the next n closing prices
 
     # Get the share price when invested from yesterday's closing price which should be today's opening price
     price_invested = df.iloc[-1]['Adj Close']
@@ -92,10 +81,9 @@ def stock_view(request): # Define a stock_view function that takes a request and
     price_sold = y_new[-1]
 
     # Calculate the profit or loss based on the new method
-    investment = 1000  # Assume an investment of $1000
-    shares = investment / price_invested  # Number of shares bought with the investment
-    profit_loss = (price_sold - price_invested) * shares  # Profit or loss amount
-    profit_loss_percent = (profit_loss / investment) * 100  # Profit or loss percentage
+    shares = investment / price_invested # Number of shares bought with the investment
+    profit_loss = (price_sold - price_invested) * shares # Profit or loss amount
+    profit_loss_percent = (profit_loss / investment) * 100 # Profit or loss percentage
     final_value = price_sold * shares
     
     # Create a list of results to pass to the template.
@@ -104,17 +92,15 @@ def stock_view(request): # Define a stock_view function that takes a request and
 
     import matplotlib.pyplot as plt
 
-    # Create x-axis values (dates)
-    dates = X_new.index  # Get the dates from X_new
+    # Create x-axis values (days)
+    days_range = list(range(1, n + 1))
 
-    # Create a line chart to compare actual and predicted values
+    # Create a line chart
     plt.figure(figsize=(10, 6))
-    plt.plot(dates[:-days], df['Adj Close'].tail(n - days), color='blue', label='Actual')  # Plot the actual closing prices for the past n-days days
-    plt.plot(dates[-days - 1:], y_new[-days - 1:], color='red', label='Predicted')  # Plot the predicted closing prices for the next n days
-    plt.title(f'Actual vs Predicted Closing Prices for {stock}')
-    plt.xlabel('Date')
-    plt.ylabel('Closing Price')
-    plt.legend()
+    plt.plot(days_range, y_new, marker='o')
+    plt.title(f'Predicted Closing Prices for {stock}')
+    plt.xlabel('Days')
+    plt.ylabel('Predicted Closing Price')
     plt.grid(True)
 
     # Define the path to save the chart image in the static folder of the "stock_app" app
