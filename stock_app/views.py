@@ -1,12 +1,12 @@
 import os
 
-from django.shortcuts import render # Import the HttpResponse and render classes
+from django.shortcuts import render  # Import the HttpResponse and render classes
 from django.shortcuts import HttpResponse
-import yfinance as yf # Import the yfinance module
+import yfinance as yf  # Import the yfinance module
 import numpy as np
-import pandas as pd # Import the pandas module
+import pandas as pd  # Import the pandas module
 from sklearn import preprocessing, model_selection
-from sklearn.linear_model import LinearRegression # Import the LinearRegression class
+from sklearn.linear_model import LinearRegression  # Import the LinearRegression class
 from sklearn.model_selection import train_test_split
 from plotly.offline import plot
 import plotly.graph_objects as go
@@ -16,15 +16,16 @@ import datetime as dt
 from stock_project import settings
 
 
-def home_view(request): # Define a home_view function that takes a request as an argument
+def home_view(request):  # Define a home_view function that takes a request as an argument
     # Get the stock symbol from the request and assign it to a variable. If it is None, set it to some default value.
     stock = request.GET.get('stock')
     if not stock:
-        stock = 'AAPL' # Default stock symbol
-    return render(request, 'home.html', {'stock': stock}) # Render the home.html template and pass the stock variable as context
+        stock = 'AAPL'  # Default stock symbol
+    return render(request, 'home.html',
+                  {'stock': stock})  # Render the home.html template and pass the stock variable as context
 
 
-def stock_view(request): # Define a stock_view function that takes a request and a stock symbol as arguments
+def stock_view(request):  # Define a stock_view function that takes a request and a stock symbol as arguments
     stock = request.GET.get('stock')
     # Get the investment amount and days from the request and convert them to float and int respectively. If they are None, set them to some default values.
     investment = request.GET.get('investment')
@@ -32,20 +33,20 @@ def stock_view(request): # Define a stock_view function that takes a request and
     if investment:
         investment = float(investment)
     else:
-        investment = 1000 # Default investment amount
+        investment = 1000  # Default investment amount
     if days:
         days = int(days)
     else:
-        days = 10 # Default number of days
-    
+        days = 10  # Default number of days
+
     # Download the stock data as a pandas dataframe using the yfinance.download function. You don't need to save it to the database.
     from datetime import datetime, timedelta
 
     # Get yesterday's date
-    yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
+    # yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
 
     # Replace 'end' parameter with yesterday's date
-    df = yf.download(stock, start='2021-07-13', end=yesterday, interval='1d')
+    df = yf.download(stock, period='2y', interval='1d')
     print(df)
 
     # Fetching ticker values from Yahoo Finance API
@@ -60,6 +61,7 @@ def stock_view(request): # Define a stock_view function that takes a request and
     y = np.array(df_ml['Prediction'])
     y = y[:-forecast_out]
     X_train, X_test, y_train, y_test = model_selection.train_test_split(X, y, test_size=0.2)
+
     # Applying Linear Regression
     clf = LinearRegression()
     clf.fit(X_train, y_train)
@@ -102,15 +104,14 @@ def stock_view(request): # Define a stock_view function that takes a request and
     price_sold = (last_prediction * std_train) + mean_train
 
     # Calculate the profit or loss based on the new method
-    shares = investment / price_invested # Number of shares bought with the investment
-    profit_loss = (price_sold - price_invested) * shares # Profit or loss amount
-    profit_loss_percent = (profit_loss / investment) * 100 # Profit or loss percentage
+    shares = investment / price_invested  # Number of shares bought with the investment
+    profit_loss = (price_sold - price_invested) * shares  # Profit or loss amount
+    profit_loss_percent = (profit_loss / investment) * 100  # Profit or loss percentage
     final_value = price_sold * shares
-    
+
     # Create a list of results to pass to the template.
-    results = [round(price_invested, 2), round(price_sold, 2), round(final_value, 2), round(profit_loss, 2), round(profit_loss_percent, 2)]
-
-
+    results = [round(price_invested, 2), round(price_sold, 2), round(final_value, 2), round(profit_loss, 2),
+               round(profit_loss_percent, 2)]
 
     # Create a context dictionary to pass to the template.
     context = {
