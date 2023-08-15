@@ -5,9 +5,14 @@ from django.shortcuts import HttpResponse
 import yfinance as yf # Import the yfinance module
 import numpy as np
 import pandas as pd # Import the pandas module
+from sklearn import preprocessing, model_selection
 from sklearn.linear_model import LinearRegression # Import the LinearRegression class
 from sklearn.model_selection import train_test_split
-
+from plotly.offline import plot
+import plotly.graph_objects as go
+import plotly.express as px
+from plotly.graph_objs import Scatter
+import datetime as dt
 from stock_project import settings
 
 
@@ -43,42 +48,58 @@ def stock_view(request): # Define a stock_view function that takes a request and
     df = yf.download(stock, start='2021-07-13', end=yesterday, interval='1d')
     print(df)
 
-    # Create a new column for the target variable
-    df['Next_Close'] = df['Adj Close'].shift(-1) # The next day's closing price
+    # Fetching ticker values from Yahoo Finance API
+    df_ml = df[['Adj Close']]
+    forecast_out = int(days)
+    df_ml['Prediction'] = df_ml[['Adj Close']].shift(-forecast_out)
+    # Splitting data for Test and Train
+    X = np.array(df_ml.drop(['Prediction'], axis=1))
+    X = preprocessing.scale(X)
+    X_forecast = X[-forecast_out:]
+    X = X[:-forecast_out]
+    y = np.array(df_ml['Prediction'])
+    y = y[:-forecast_out]
+    X_train, X_test, y_train, y_test = model_selection.train_test_split(X, y, test_size=0.2)
+    # Applying Linear Regression
+    clf = LinearRegression()
+    clf.fit(X_train, y_train)
 
-    # Drop the last row as it has a missing value
-    df.dropna(inplace=True)
+    # Prediction Score
+    confidence = clf.score(X_test, y_test)
+    # Predicting for 'n' days stock data
+    forecast_prediction = clf.predict(X_forecast)
+    forecast = forecast_prediction.tolist()
 
-    # Define the features and the target
-    X = df[['Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume']] # You can add more features if you want
-    y = df['Next_Close']
-
-    # Split the data into train and test sets
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-    # Create and fit a linear regression model
-    model = LinearRegression()
-    model.fit(X_train, y_train)
-
-    # Make predictions on the test set
-    y_pred = model.predict(X_test)
-    
     # Evaluate the model performance
-    from sklearn.metrics import mean_squared_error, r2_score
-    mse = mean_squared_error(y_test, y_pred)
-    rmse = np.sqrt(mse)
-    r2 = r2_score(y_test, y_pred)
+    pred_dict = {"Date": [], "Prediction": []}
+    for i in range(0, len(forecast)):
+        pred_dict["Date"].append(dt.datetime.today() + dt.timedelta(days=i))
+        pred_dict["Prediction"].append(forecast[i])
 
-    # Predict the closing price for the next n days using the model
-    n = days + 1 # Add one more day for the initial investment
-    X_new = df[['Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume']].tail(n) # Get the last n rows of features
-    y_new = model.predict(X_new) # Predict the next n closing prices
+    pred_df = pd.DataFrame(pred_dict)
+    pred_fig = go.Figure([go.Scatter(x=pred_df['Date'], y=pred_df['Prediction'])])
+    pred_fig.update_xaxes(rangeslider_visible=True)
+    pred_fig.update_layout(paper_bgcolor="lightgrey", plot_bgcolor="lightgrey", font_color="black")
+    plot_div_pred = plot(pred_fig, auto_open=False, output_type='div')
 
     # Get the share price when invested from yesterday's closing price which should be today's opening price
     price_invested = df.iloc[-1]['Adj Close']
 
-    # Get the share price when sold from the last predicted closing price
-    price_sold = y_new[-1]
+    # Assuming X is a numpy array that stores the original data
+    X = np.array(df_ml['Adj Close'])
+
+    # Assuming forecast is a list that stores the scaled predictions
+    forecast = forecast_prediction.tolist()
+
+    # Get the last predicted value
+    last_prediction = forecast[-1]
+
+    # Get the standard deviation and mean of the original scaled data (X_train)
+    std_train = np.std(X_train)
+    mean_train = np.mean(X_train)
+
+    # Rescale the last predicted value using the same scaling factors
+    price_sold = (last_prediction * std_train) + mean_train
 
     # Calculate the profit or loss based on the new method
     shares = investment / price_invested # Number of shares bought with the investment
@@ -87,31 +108,9 @@ def stock_view(request): # Define a stock_view function that takes a request and
     final_value = price_sold * shares
     
     # Create a list of results to pass to the template.
-    results = [round(price_invested, 2), round(y_new[-1], 2), round(final_value, 2), round(profit_loss, 2), round(profit_loss_percent, 2)]
+    results = [round(price_invested, 2), round(price_sold, 2), round(final_value, 2), round(profit_loss, 2), round(profit_loss_percent, 2)]
 
 
-    import matplotlib.pyplot as plt
-
-    # Create x-axis values (days)
-    days_range = list(range(1, n + 1))
-
-    # Create a line chart
-    plt.figure(figsize=(10, 6))
-    plt.plot(days_range, y_new, marker='o')
-    plt.title(f'Predicted Closing Prices for {stock}')
-    plt.xlabel('Days')
-    plt.ylabel('Predicted Closing Price')
-    plt.grid(True)
-
-    # Define the path to save the chart image in the static folder of the "stock_app" app
-    chart_filename = os.path.join(settings.BASE_DIR, 'stock_app', 'static', 'predicted_prices.png')
-
-    # Ensure the directory for the image exists before saving
-    os.makedirs(os.path.dirname(chart_filename), exist_ok=True)
-
-    # Save the plot to a file or display it
-    plt.savefig(chart_filename)  # Save to a file
-    # plt.show()  # Display the plot
 
     # Create a context dictionary to pass to the template.
     context = {
@@ -121,9 +120,10 @@ def stock_view(request): # Define a stock_view function that takes a request and
         'results': results,
         'profit_loss_percent': round(profit_loss_percent, 2),
         'profit_loss': round(profit_loss, 2),
-        'MSE': round(mse, 2),
-        'R2': round(r2, 2),
-        'predicted_chart': 'predicted_prices.png',
+        # 'MSE': round(mse, 2),
+        # 'R2': round(r2, 2),
+        'plot_div_pred': plot_div_pred,
+        # 'predicted_chart': 'predicted_prices.png',
     }
 
     # Render the template with the context using the render function.
