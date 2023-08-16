@@ -46,13 +46,14 @@ def stock_view(request):  # Define a stock_view function that takes a request an
     # yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
 
     # Replace 'end' parameter with yesterday's date
-    df = yf.download(stock, period='2y', interval='1d')
+    df = yf.download(stock, period='3y', interval='1d')
     print(df)
 
     # Fetching ticker values from Yahoo Finance API
     df_ml = df[['Adj Close']]
     forecast_out = int(days)
     df_ml['Prediction'] = df_ml[['Adj Close']].shift(-forecast_out)
+
     # Splitting data for Test and Train
     X = np.array(df_ml.drop(['Prediction'], axis=1))
     X = preprocessing.scale(X)
@@ -78,10 +79,30 @@ def stock_view(request):  # Define a stock_view function that takes a request an
         pred_dict["Date"].append(dt.datetime.today() + dt.timedelta(days=i))
         pred_dict["Prediction"].append(forecast[i])
 
+    # Plot the chart for historical prices
+    # Create a candlestick chart using plotly
+    fig = go.Figure(data=[go.Candlestick(
+        x=df.index,
+        open=df['Open'],
+        high=df['High'].shift(-1),
+        low=df['Low'].shift(1),
+        close=df['Adj Close']
+    )])
+
+    # Add title and labels
+    fig.update_layout(
+        title='Adjusted Close Price of the Stock',
+        xaxis_title='Date',
+        yaxis_title='Price'
+    )
+    historical_plot = plot(fig, auto_open=False, output_type='div')
+
+    # Plot the chart for predicted prices
     pred_df = pd.DataFrame(pred_dict)
     pred_fig = go.Figure([go.Scatter(x=pred_df['Date'], y=pred_df['Prediction'])])
     pred_fig.update_xaxes(rangeslider_visible=True)
-    pred_fig.update_layout(paper_bgcolor="lightgrey", plot_bgcolor="lightgrey", font_color="black")
+    pred_fig.update_layout(title='Predicted Adjusted Close Prices', paper_bgcolor="lightgrey", plot_bgcolor="lightgrey",
+                           font_color="black")
     plot_div_pred = plot(pred_fig, auto_open=False, output_type='div')
 
     # Get the share price when invested from yesterday's closing price which should be today's opening price
@@ -106,12 +127,18 @@ def stock_view(request):  # Define a stock_view function that takes a request an
     # Calculate the profit or loss based on the new method
     shares = investment / price_invested  # Number of shares bought with the investment
     profit_loss = (price_sold - price_invested) * shares  # Profit or loss amount
-    profit_loss_percent = (profit_loss / investment) * 100  # Profit or loss percentage
+    profit_loss_percent = abs(profit_loss / investment) * 100  # Profit or loss percentage
     final_value = price_sold * shares
 
     # Create a list of results to pass to the template.
     results = [round(price_invested, 2), round(price_sold, 2), round(final_value, 2), round(profit_loss, 2),
                round(profit_loss_percent, 2)]
+
+    df = df.reset_index()
+
+    df_latest = df.tail(5)
+
+    df_latest = df_latest.round(2)
 
     # Create a context dictionary to pass to the template.
     context = {
@@ -124,7 +151,9 @@ def stock_view(request):  # Define a stock_view function that takes a request an
         # 'MSE': round(mse, 2),
         # 'R2': round(r2, 2),
         'plot_div_pred': plot_div_pred,
+        'historical_plot': historical_plot,
         # 'predicted_chart': 'predicted_prices.png',
+        'df_latest': df_latest,
     }
 
     # Render the template with the context using the render function.

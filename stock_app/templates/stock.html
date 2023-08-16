@@ -57,9 +57,9 @@
         <p>You get ${{ results.2 }} when you sell your shares.</p>
 
         {% if profit_loss > 0 %}
-        <p>You made a profit of ${{ profit_loss }}, which is {{ profit_loss_percent }}% of your investment.</p>
+        <p>You might make a profit of ${{ profit_loss }}, which is {{ profit_loss_percent }}% of your investment.</p>
         {% elif profit_loss < 0 %}
-        <p>You made a loss of ${{ profit_loss }}, which is {{ profit_loss_percent }}% of your investment.</p>
+        <p>You might make a loss of ${{ profit_loss }}, which is {{ profit_loss_percent }}% of your investment.</p>
         {% else %}
         <p>You broke even.</p>
         {% endif %}
@@ -71,6 +71,40 @@
             {% endautoescape %}
         {% endblock Right_Plot %}
       </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            {% block Down_plot %}
+                {% autoescape off %}
+                    {{ historical_plot }}
+                {% endautoescape %}
+            {% endblock Down_plot %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <h5 class="mb-3">{{ stock }} Stock Data for the last 5 days</h5>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  {% for col in df_latest.columns %}
+                  <th>{{ col }}</th>
+                  {% endfor %}
+                </tr>
+              </thead>
+              <tbody>
+                {% for index, row in df_latest.iterrows %}
+                <tr>
+                  {% for cell in row %}
+                  <td>{{ cell }}</td>
+                  {% endfor %}
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+        </div>
     </div>
 
     {% endif %}
