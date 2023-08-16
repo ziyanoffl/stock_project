@@ -124,7 +124,7 @@ def stock_view(request):  # Define a stock_view function that takes a request an
     # Rescale the last predicted value using the same scaling factors
     price_sold = (last_prediction * std_train) + mean_train
 
-    # Calculate the profit or loss based on the new method
+    # Calculations
     shares = investment / price_invested  # Number of shares bought with the investment
     profit_loss = (price_sold - price_invested) * shares  # Profit or loss amount
     profit_loss_percent = abs(profit_loss / investment) * 100  # Profit or loss percentage
