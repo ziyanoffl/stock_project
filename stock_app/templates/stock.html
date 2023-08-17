@@ -7,7 +7,7 @@
     <form class="mt-4" method="GET" action="{{ stock_view }}">
         <div class="row">
             <div class="col-md-4">
-                <label for="stock" class="form-label">Enter stock symbol:</label>
+                <label for="stock" class="form-label">Choose stock:</label>
                 <select class="form-control form-select" id="stock" name="stock">
                     <option value="AAPL" {% if stock == 'AAPL' %}selected{% endif %}>Apple Inc. (AAPL)</option>
                     <option value="MSFT" {% if stock == 'MSFT' %}selected{% endif %}>Microsoft Corporation (MSFT)
