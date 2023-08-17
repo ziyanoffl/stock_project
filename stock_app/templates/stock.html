@@ -1,114 +1,133 @@
-{% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Stock Price Prediction</title>
-  <link rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css">
-</head>
-<body>
-  <div class="container mt-5">
-    <h1 class="text-center">Stock Price Prediction</h1>
-    <form class="mt-4" method="GET" action="{% url 'stock_view'%}">
-      <div class="row">
-        <div class="col-md-4">
-          <label for="stock">Enter stock symbol:</label>
-          <select  class="form-control" id="stock" name="stock">
-             <option value="AAPL" {% if stock == 'AAPL' %}selected{% endif %}>Apple Inc. (AAPL)</option>
-             <option value="MSFT" {% if stock == 'MSFT' %}selected{% endif %}>Microsoft Corporation (MSFT)</option>
-             <option value="GOOG" {% if stock == 'GOOG' %}selected{% endif %}>Alphabet Inc. (GOOG)</option>
-             <option value="AMZN" {% if stock == 'AMZN' %}selected{% endif %}>Amazon.com, Inc. (AMZN)</option>
-             <option value="NVDA" {% if stock == 'NVDA' %}selected{% endif %}>NVIDIA Corporation (NVDA)</option>
-             <option value="TSLA" {% if stock == 'TSLA' %}selected{% endif %}>Tesla, Inc. (TSLA)</option>
-             <option value="BRK-B" {% if stock == 'BRK-B' %}selected{% endif %}>Berkshire Hathaway Inc. (BRK-B)</option>
-             <option value="META" {% if stock == 'META' %}selected{% endif %}>Meta Platforms, Inc. (META)</option>
-             <option value="TSM" {% if stock == 'TSM' %}selected{% endif %}>Taiwan Semiconductor Manufacturing Company Limited (TSM)</option>
-             <option value="V" {% if stock == 'V' %}selected{% endif %}>Visa Inc. (V)</option>
-             <option value="LLY" {% if stock == 'LLY' %}selected{% endif %}>Eli Lilly and Company (LLY)</option>
-             <option value="UNH" {% if stock == 'UNH' %}selected{% endif %}>UnitedHealth Group Incorporated (UNH)</option>
-             <option value="MC.PA" {% if stock == 'MC.PA' %}selected{% endif %}>LVMH Moët Hennessy - Louis Vuitton, Société Européenne (MC.PA)</option>
-             <option value="JNJ" {% if stock == 'JNJ' %}selected{% endif %}>Johnson & Johnson (JNJ)</option>
-             <option value="JPM" {% if stock == 'JPM' %}selected{% endif %}>JPMorgan Chase & Co. (JPM)</option>
-             <option value="XOM" {% if stock == 'XOM' %}selected{% endif %}>Exxon Mobil Corporation (XOM)</option>
-             <option value="WMT" {% if stock == 'WMT' %}selected{% endif %}>Walmart Inc. (WMT)</option>
-             <option value="TCEHY" {% if stock == 'TCEHY' %}selected{% endif %}>Tencent Holdings Limited (TCEHY)</option>
-             <option value="NVO" {% if stock == 'NVO' %}selected{% endif %}>Novo Nordisk A/S (NVO)</option>
-             <option value="MA" {% if stock == 'MA' %}selected{% endif %}>Mastercard Incorporated (MA)</option>
-            </select>
+{% extends 'base.html' %}
+
+{% block title %}IST Platform | Predictions{% endblock %}
+
+{% block content %}
+     <h1 class="text-center">Stock Price Prediction</h1>
+    <form class="mt-4" method="GET" action="{{ stock_view }}">
+        <div class="row">
+            <div class="col-md-4">
+                <label for="stock">Enter stock symbol:</label>
+                <select class="form-control" id="stock" name="stock">
+                    <option value="AAPL" {% if stock == 'AAPL' %}selected{% endif %}>Apple Inc. (AAPL)</option>
+                    <option value="MSFT" {% if stock == 'MSFT' %}selected{% endif %}>Microsoft Corporation (MSFT)
+                    </option>
+                    <option value="GOOG" {% if stock == 'GOOG' %}selected{% endif %}>Alphabet Inc. (GOOG)</option>
+                    <option value="AMZN" {% if stock == 'AMZN' %}selected{% endif %}>Amazon.com, Inc. (AMZN)</option>
+                    <option value="NVDA" {% if stock == 'NVDA' %}selected{% endif %}>NVIDIA Corporation (NVDA)</option>
+                    <option value="TSLA" {% if stock == 'TSLA' %}selected{% endif %}>Tesla, Inc. (TSLA)</option>
+                    <option value="BRK-B" {% if stock == 'BRK-B' %}selected{% endif %}>Berkshire Hathaway Inc. (BRK-B)
+                    </option>
+                    <option value="META" {% if stock == 'META' %}selected{% endif %}>Meta Platforms, Inc. (META)
+                    </option>
+                    <option value="TSM" {% if stock == 'TSM' %}selected{% endif %}>Taiwan Semiconductor Manufacturing
+                        Company Limited (TSM)
+                    </option>
+                    <option value="V" {% if stock == 'V' %}selected{% endif %}>Visa Inc. (V)</option>
+                    <option value="LLY" {% if stock == 'LLY' %}selected{% endif %}>Eli Lilly and Company (LLY)</option>
+                    <option value="UNH" {% if stock == 'UNH' %}selected{% endif %}>UnitedHealth Group Incorporated
+                        (UNH)
+                    </option>
+                    <option value="MC.PA" {% if stock == 'MC.PA' %}selected{% endif %}>LVMH Moët Hennessy - Louis
+                        Vuitton, Société Européenne (MC.PA)
+                    </option>
+                    <option value="JNJ" {% if stock == 'JNJ' %}selected{% endif %}>Johnson & Johnson (JNJ)</option>
+                    <option value="JPM" {% if stock == 'JPM' %}selected{% endif %}>JPMorgan Chase & Co. (JPM)</option>
+                    <option value="XOM" {% if stock == 'XOM' %}selected{% endif %}>Exxon Mobil Corporation (XOM)
+                    </option>
+                    <option value="WMT" {% if stock == 'WMT' %}selected{% endif %}>Walmart Inc. (WMT)</option>
+                    <option value="TCEHY" {% if stock == 'TCEHY' %}selected{% endif %}>Tencent Holdings Limited
+                        (TCEHY)
+                    </option>
+                    <option value="NVO" {% if stock == 'NVO' %}selected{% endif %}>Novo Nordisk A/S (NVO)</option>
+                    <option value="MA" {% if stock == 'MA' %}selected{% endif %}>Mastercard Incorporated (MA)</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="investment">Enter investment amount:</label>
+                <input type="number" class="form-control" id="investment" name="investment" value="{{ investment }}">
+            </div>
+            <div class="col-md-4">
+                <label for="days">Enter number of days:</label>
+                <input type="number" class="form-control" id="days" name="days" value="{{ days }}">
+            </div>
         </div>
-        <div class="col-md-4">
-          <label for="investment">Enter investment amount:</label>
-          <input type="number" class="form-control" id="investment" name="investment" value="{{ investment }}">
+        <div class="row mt-3">
+            <div class="col-md-4">
+                <label for="days">Enter profit margin:</label>
+                <input type="number" class="form-control" id="profit_margin" name="profit_margin"
+                       value="{{ profit_margin }}">
+            </div>
         </div>
-        <div class="col-md-4">
-          <label for="days">Enter number of days:</label>
-          <input type="number" class="form-control" id="days" name="days" value="{{ days }}">
-        </div>
-      </div>
-      <button type="submit" class="btn btn-primary mt-3">Predict</button>
+        <button type="submit" class="btn btn-primary mt-3">Predict</button>
     </form>
 
     {% if results %}
-    <div class="mt-5 row">
-      <div class="col-6" style="float: left;">
-{#        <p>R2 score: {{ R2 }}</p>#}
-        <p>You invested ${{ investment }} in {{ stock }} stock for {{ days }} days.</p>
-        <p>The buying price for today is: ${{ results.0 }}.</p>
-        <p>The predicted closing price for {{ days }} days later is ${{ results.1 }}.</p>
-        <p>You get ${{ results.2 }} when you sell your shares.</p>
+        <div class="mt-5 row">
+            <div class="col-6" style="float: left;">
+                {#        <p>R2 score: {{ R2 }}</p>#}
+                <p>You invested ${{ investment }} in {{ stock }} stock for {{ days }} days.</p>
+                <p>The buying price for today is: ${{ results.0 }}.</p>
+                <p>The predicted closing price for {{ days }} days later is ${{ results.1 }}.</p>
+                <p>You get ${{ results.2 }} when you sell your shares.</p>
 
-        {% if profit_loss > 0 %}
-        <p>You might make a profit of ${{ profit_loss }}, which is {{ profit_loss_percent }}% of your investment.</p>
-        {% elif profit_loss < 0 %}
-        <p>You might make a loss of ${{ profit_loss }}, which is {{ profit_loss_percent }}% of your investment.</p>
-        {% else %}
-        <p>You broke even.</p>
-        {% endif %}
-      </div>
-      <div class="col-6" style="float: right;">
-        {% block Right_Plot %}
-            {% autoescape off %}
-                {{ plot_div_pred }}
-            {% endautoescape %}
-        {% endblock Right_Plot %}
-      </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            {% block Down_plot %}
-                {% autoescape off %}
-                    {{ historical_plot }}
-                {% endautoescape %}
-            {% endblock Down_plot %}
+                {% if profit_loss > 0 %}
+                    <p>You might make a profit of ${{ profit_loss }}, which is {{ profit_loss_percent }}% of your
+                        investment.</p>
+                    {% if profit_loss > profit_margin %}
+                        <div class="alert alert-success">
+                            This stock is suggested since it fetches more profit than your profit margin
+                        </div>
+                    {% endif %}
+                {% elif profit_loss < 0 %}
+                    <p>You might make a loss of ${{ profit_loss }}, which is {{ profit_loss_percent }}% of your
+                        investment.</p>
+                {% else %}
+                    <p>You broke even.</p>
+                {% endif %}
+            </div>
+            <div class="col-6" style="float: right;">
+                {% block Right_Plot %}
+                    {% autoescape off %}
+                        {{ plot_div_pred }}
+                    {% endautoescape %}
+                {% endblock Right_Plot %}
+            </div>
         </div>
-    </div>
-
-    <div class="row">
-        <div class="col-12">
-            <h5 class="mb-3">{{ stock }} Stock Data for the last 5 days</h5>
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  {% for col in df_latest.columns %}
-                  <th>{{ col }}</th>
-                  {% endfor %}
-                </tr>
-              </thead>
-              <tbody>
-                {% for index, row in df_latest.iterrows %}
-                <tr>
-                  {% for cell in row %}
-                  <td>{{ cell }}</td>
-                  {% endfor %}
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-
+        <div class="row">
+            <div class="col-12">
+                {% block Down_plot %}
+                    {% autoescape off %}
+                        {{ historical_plot }}
+                    {% endautoescape %}
+                {% endblock Down_plot %}
+            </div>
         </div>
-    </div>
+
+        <div class="row">
+            <div class="col-12">
+                <h5 class="mb-3">{{ stock }} Stock Data for the last 5 days</h5>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        {% for col in df_latest.columns %}
+                            <th>{{ col }}</th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for index, row in df_latest.iterrows %}
+                        <tr>
+                            {% for cell in row %}
+                                <td>{{ cell }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
 
     {% endif %}
-
-  </div>
-</body>
-</html>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% url 'stock_suggestion' as stock_suggestion %}
+{% url 'home_view' as home_view %}
+{% url 'stock_view' as stock_view %}
+{% url 'find_suitable_stocks' as find_suitable_stocks %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Website{% endblock %}</title>
+    <!-- Include Bootstrap 5 CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap@5/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3 py-2">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">IST platform</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == home_view or request.path == stock_view %}active{% endif %}" href="{{ home_view }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == stock_suggestion or request.path == find_suitable_stocks %}active{% endif %}" href="{{ stock_suggestion }}">Stock Suggestion</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="container mt-4">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- Include Bootstrap 5 JS -->
+    <script src="https://unpkg.com/bootstrap@5/dist/js/bootstrap"></script>
+</body>
+</html>
