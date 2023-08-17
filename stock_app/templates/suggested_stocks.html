@@ -38,7 +38,7 @@
                 {% for stock in suitable_stocks %}
                     <tr>
                         <td>{{ stock.symbol }}</td>
-                        <td>£{{ stock.potential_profit|floatformat:2 }}</td>
+                        <td>${{ stock.potential_profit|floatformat:2 }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

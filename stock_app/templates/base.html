@@ -2,6 +2,9 @@
 {% url 'home_view' as home_view %}
 {% url 'stock_view' as stock_view %}
 {% url 'find_suitable_stocks' as find_suitable_stocks %}
+{% url 'what_if' as what_if %}
+{% url 'what_if_results' as what_if_results %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,6 +29,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if request.path == stock_suggestion or request.path == find_suitable_stocks %}active{% endif %}" href="{{ stock_suggestion }}">Stock Suggestion</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == what_if or request.path == what_if_results %}active{% endif %}" href="{{ what_if }}">What if Scenarios</a>
                     </li>
                 </ul>
             </div>
