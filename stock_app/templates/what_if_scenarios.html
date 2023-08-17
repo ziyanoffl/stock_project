@@ -7,7 +7,7 @@
     <form class="mt-4" method="GET" action="{{ what_if_results }}">
         <div class="row">
             <div class="col-md-4">
-                <label for="stock">Enter stock symbol:</label>
+                <label for="stock" class="form-label">Enter stock symbol:</label>
                 <select class="form-control" id="stock" name="stock">
                     <option value="AAPL" {% if stock == 'AAPL' %}selected{% endif %}>Apple Inc. (AAPL)</option>
                     <option value="MSFT" {% if stock == 'MSFT' %}selected{% endif %}>Microsoft Corporation (MSFT)
@@ -44,19 +44,30 @@
                 </select>
             </div>
             <div class="col-md-4">
-                <label for="investment">Enter investment amount:</label>
-                <input type="number" class="form-control" id="investment" name="investment" value="{{ investment }}">
+                <label for="investment" class="form-label">Enter investment amount:</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="number" class="form-control" id="investment" name="investment"
+                           value="{{ investment }}"
+                           step="0.01"
+                           required>
+                </div>
             </div>
             <div class="col-md-4">
-                <label for="days">Enter number of days:</label>
+                <label for="days" class="form-label">Enter number of days:</label>
                 <input type="number" class="form-control" id="days" name="days" value="{{ days }}">
             </div>
         </div>
         <div class="row mt-3">
             <div class="col-md-4">
-                <label for="days">Enter profit margin:</label>
-                <input type="number" class="form-control" id="profit_margin" name="profit_margin"
-                       value="{{ profit_margin }}">
+                <label for="profit_margin" class="form-label">Enter profit margin:</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="number" class="form-control" id="profit_margin" name="profit_margin"
+                           value="{{ profit_margin }}"
+                           step="0.01"
+                           required>
+                </div>
             </div>
         </div>
 
@@ -67,39 +78,44 @@
             </div>
             <div class="row">
                 <div class="col-md-4">
-                    <label for="interest_rate_change">Enter the change in interest rates:</label>
+                    <label for="interest_rate_change" class="form-label">Enter the change in interest rates:</label>
                     <input type="number" step="0.01" class="form-control" id="interest_rate_change"
                            name="interest_rate_change"
                            value="{{ interest_rate_change }}"
-                           placeholder="0.1">
+                           placeholder="0.1"
+                           required>
                 </div>
                 <div class="col-md-4">
-                    <label for="inflation_change">Enter the change in inflation:</label>
+                    <label for="inflation_change" class="form-label">Enter the change in inflation:</label>
                     <input type="number" step="0.01" class="form-control" id="inflation_change" name="inflation_change"
                            value="{{ inflation_change }}"
-                           placeholder="0.1">
+                           placeholder="0.1"
+                           required>
                 </div>
                 <div class="col-md-4">
-                    <label for="growth_change">Enter the change in economic growth:</label>
+                    <label for="growth_change" class="form-label">Enter the change in economic growth:</label>
                     <input type="number" step="0.01" class="form-control" id="growth_change" name="growth_change"
                            value="{{ growth_change }}"
-                           placeholder="0.1">
+                           placeholder="0.1"
+                           required>
                 </div>
             </div>
             <div class="row mt-4">
                 <div class="col-md-4">
-                    <label for="asset_allocation_change">Enter the change in asset allocation:</label>
+                    <label for="asset_allocation_change" class="form-label">Enter the change in asset allocation:</label>
                     <input type="number" step="0.01" class="form-control" id="asset_allocation_change"
                            name="asset_allocation_change"
                            value="{{ asset_allocation_change }}"
-                           placeholder="0.1">
+                           placeholder="0.1"
+                           required>
                 </div>
                 <div class="col-md-4">
-                    <label for="risk_tolerance_change">Enter the change in risk tolerance:</label>
+                    <label for="risk_tolerance_change" class="form-label">Enter the change in risk tolerance:</label>
                     <input type="number" step="0.01" class="form-control" id="risk_tolerance_change"
                            name="risk_tolerance_change"
                            value="{{ risk_tolerance_change }}"
-                           placeholder="0.1">
+                           placeholder="0.1"
+                           required>
                 </div>
             </div>
 
@@ -109,7 +125,7 @@
 
     {% if results %}
         <div class="mt-5 row">
-            <div class="col-6" style="float: left;">
+            <div class="col-md-6" style="float: left;">
                 {#        <p>R2 score: {{ R2 }}</p>#}
                 <p>You invested ${{ investment }} in {{ stock }} stock for {{ days }} days.</p>
                 <p>The buying price for today is: ${{ results.0 }}.</p>
@@ -131,7 +147,7 @@
                     <p>You broke even.</p>
                 {% endif %}
             </div>
-            <div class="col-6" style="float: right;">
+            <div class="col-md-6" style="float: right;">
                 {% block Right_Plot %}
                     {% autoescape off %}
                         {{ plot_div_pred }}

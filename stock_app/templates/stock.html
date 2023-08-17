@@ -6,9 +6,9 @@
     <h1 class="text-center">Stock Price Prediction</h1>
     <form class="mt-4" method="GET" action="{{ stock_view }}">
         <div class="row">
-            <div class="col-md-4 text-center">
+            <div class="col-md-4">
                 <label for="stock" class="form-label">Enter stock symbol:</label>
-                <select class="form-control form-select-lg" id="stock" name="stock">
+                <select class="form-control form-select" id="stock" name="stock">
                     <option value="AAPL" {% if stock == 'AAPL' %}selected{% endif %}>Apple Inc. (AAPL)</option>
                     <option value="MSFT" {% if stock == 'MSFT' %}selected{% endif %}>Microsoft Corporation (MSFT)
                     </option>
@@ -43,28 +43,30 @@
                     <option value="MA" {% if stock == 'MA' %}selected{% endif %}>Mastercard Incorporated (MA)</option>
                 </select>
             </div>
-            <div class="col-md-4 text-center">
+            <div class="col-md-4">
                 <label for="investment" class="form-label">Enter investment amount:</label>
                 <div class="input-group">
                     <span class="input-group-text">$</span>
                     <input type="number" class="form-control" id="investment" name="investment"
                            value="{{ investment }}"
-                           step="0.01">
+                           step="0.01"
+                           required>
                 </div>
             </div>
-            <div class="col-md-4 text-center">
+            <div class="col-md-4">
                 <label for="days" class="form-label">Enter number of days:</label>
                 <input type="number" class="form-control" id="days" name="days" value="{{ days }}">
             </div>
         </div>
         <div class="row mt-3">
-            <div class="col-md-4 text-center">
+            <div class="col-md-4">
                 <label for="profit_margin" class="form-label">Enter profit margin:</label>
                 <div class="input-group">
+                    <span class="input-group-text">$</span>
                     <input type="number" class="form-control" id="profit_margin" name="profit_margin"
                            value="{{ profit_margin }}"
-                           step="0.01">
-                    <span class="input-group-text">%</span>
+                           step="0.01"
+                           required>
                 </div>
             </div>
         </div>

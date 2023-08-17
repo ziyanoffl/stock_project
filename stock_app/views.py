@@ -287,6 +287,7 @@ def calculate_potential_profit(stock, target_profit, time_interval, investment):
 
 
 def what_if_results(request):  # Define a stock_view function that takes a request and a stock symbol as arguments
+    np.random.seed(0)
     # Get the stock symbol, investment amount, days, and profit margin from the request
     stock = request.GET.get('stock')
     investment = request.GET.get('investment')
@@ -425,7 +426,7 @@ def what_if_results(request):  # Define a stock_view function that takes a reque
     # Create a context dictionary to pass to the template.
     context = {
         'stock': stock,
-        'investment': investment,
+        'investment': round(investment, 2),
         'days': days,
         'results': results,
         'profit_loss_percent': round(profit_loss_percent, 2),
@@ -434,7 +435,11 @@ def what_if_results(request):  # Define a stock_view function that takes a reque
         'historical_plot': historical_plot,
         'df_latest': df_latest,
         'profit_margin': profit_margin,
+        'interest_rate_change': interest_rate_change,
+        'inflation_change': inflation_change,
+        'growth_change': growth_change,
+        'asset_allocation_change': asset_allocation_change,
+        'risk_tolerance_change': risk_tolerance_change,
     }
-
     # Render the template with the context using the render function.
     return render(request, 'what_if_scenarios.html', context)
