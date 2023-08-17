@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-md-4">
                 <label for="investment">Enter investment amount:</label>
-                <input type="number" class="form-control" id="investment" name="investment" value="{{ investment }}">
+                <input type="number" step="0.01" class="form-control" id="investment" name="investment" value="{{ investment }}">
             </div>
             <div class="col-md-4">
                 <label for="days">Enter number of days:</label>
@@ -18,7 +18,8 @@
             <div class="col-md-4">
                 <label for="days">Enter profit margin:</label>
                 <input type="number" class="form-control" id="profit_margin" name="profit_margin"
-                       value="{{ target_profit }}">
+                       value="{{ target_profit }}"
+                       step="0.01">
             </div>
         </div>
         <button type="submit" class="btn btn-primary mt-3">Predict</button>

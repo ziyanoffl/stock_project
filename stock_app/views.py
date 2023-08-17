@@ -41,7 +41,7 @@ def stock_view(request):  # Define a stock_view function that takes a request an
         days = 10  # Default number of days
 
     if profit_margin:
-        profit_margin = int(profit_margin)
+        profit_margin = float(profit_margin)
     else:
         profit_margin = 20
 
@@ -189,7 +189,7 @@ def find_suitable_stocks(request):
         time_interval = 10  # Default number of days
 
     if target_profit:
-        target_profit = int(target_profit)
+        target_profit = float(target_profit)
     else:
         target_profit = 20
 
@@ -310,7 +310,7 @@ def what_if_results(request):  # Define a stock_view function that takes a reque
     else:
         days = 10  # Default number of days
     if profit_margin:
-        profit_margin = int(profit_margin)
+        profit_margin = float(profit_margin)
     else:
         profit_margin = 20
 

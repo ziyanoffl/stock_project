@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}IST Platform | Predictions{% endblock %}
+{% block title %}IST Platform | Predictions with What-if scenarios{% endblock %}
 
 {% block content %}
     <h1 class="text-center">Stock Price Prediction (With scenario Adjustments)</h1>
@@ -62,21 +62,28 @@
 
         <div class="row mt-3">
             <h5>What-if scenarios</h5>
+            <div class="alert alert-primary">
+                Please enter values from 0 to 1 (The fractions represent from 1% to 100%)
+            </div>
             <div class="row">
                 <div class="col-md-4">
                     <label for="interest_rate_change">Enter the change in interest rates:</label>
-                    <input type="number" step="0.01" class="form-control" id="interest_rate_change" name="interest_rate_change"
-                           value="{{ interest_rate_change }}">
+                    <input type="number" step="0.01" class="form-control" id="interest_rate_change"
+                           name="interest_rate_change"
+                           value="{{ interest_rate_change }}"
+                           placeholder="0.1">
                 </div>
                 <div class="col-md-4">
                     <label for="inflation_change">Enter the change in inflation:</label>
                     <input type="number" step="0.01" class="form-control" id="inflation_change" name="inflation_change"
-                           value="{{ inflation_change }}">
+                           value="{{ inflation_change }}"
+                           placeholder="0.1">
                 </div>
                 <div class="col-md-4">
                     <label for="growth_change">Enter the change in economic growth:</label>
                     <input type="number" step="0.01" class="form-control" id="growth_change" name="growth_change"
-                           value="{{ growth_change }}">
+                           value="{{ growth_change }}"
+                           placeholder="0.1">
                 </div>
             </div>
             <div class="row mt-4">
@@ -84,12 +91,15 @@
                     <label for="asset_allocation_change">Enter the change in asset allocation:</label>
                     <input type="number" step="0.01" class="form-control" id="asset_allocation_change"
                            name="asset_allocation_change"
-                           value="{{ asset_allocation_change }}">
+                           value="{{ asset_allocation_change }}"
+                           placeholder="0.1">
                 </div>
                 <div class="col-md-4">
                     <label for="risk_tolerance_change">Enter the change in risk tolerance:</label>
-                    <input type="number" step="0.01" class="form-control" id="risk_tolerance_change" name="risk_tolerance_change"
-                           value="{{ risk_tolerance_change }}">
+                    <input type="number" step="0.01" class="form-control" id="risk_tolerance_change"
+                           name="risk_tolerance_change"
+                           value="{{ risk_tolerance_change }}"
+                           placeholder="0.1">
                 </div>
             </div>
 
