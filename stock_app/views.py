@@ -444,4 +444,4 @@ def what_if_results(request):  # Define a stock_view function that takes a reque
         'risk_tolerance_change': risk_tolerance_change,
     }
     # Render the template with the context using the render function.
-    return render(request, 'what_if_scenarios.html', context)
+    return TemplateResponse(request, 'what_if_scenarios.html', context)

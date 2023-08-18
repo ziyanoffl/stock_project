@@ -1,7 +1,7 @@
-from django.test import TestCase, Client
+from django.test import TestCase, Client, RequestFactory
 from django.urls import reverse
 
-from stock_app.views import calculate_potential_profit
+from stock_app.views import calculate_potential_profit, what_if_results
 
 
 class TestViews(TestCase):
@@ -65,3 +65,52 @@ class FindSuitableStocksTest(TestCase):
         response = self.client.get('/find_suitable_stocks/', self.query_params)
 
         self.assertEqual(response.status_code, 200)
+
+
+class TestWhatIfResultsView(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.factory = RequestFactory()
+        self.stock = 'AAPL'
+        self.investment = 1000
+        self.days = 10
+        self.profit_margin = 20
+        self.interest_rate_change = 0.01
+        self.inflation_change = 0.02
+        self.growth_change = 0.03
+        self.asset_allocation_change = 0.04
+        self.risk_tolerance_change = 0.05
+
+    def test_what_if_results(self):
+        request = self.factory.get('/what_if_results/', {
+            'stock': self.stock,
+            'investment': self.investment,
+            'days': self.days,
+            'profit_margin': self.profit_margin,
+            'interest_rate_change': self.interest_rate_change,
+            'inflation_change': self.inflation_change,
+            'growth_change': self.growth_change,
+            'asset_allocation_change': self.asset_allocation_change,
+            'risk_tolerance_change': self.risk_tolerance_change,
+        })
+        response = what_if_results(request)
+        # Check that the response status code is 200 (OK)
+        self.assertEqual(response.status_code, 200)
+
+        # Check that the context contains the expected values
+        context = response.context_data
+        self.assertEqual(context['stock'], self.stock)
+        self.assertEqual(context['days'], int(self.days))
+        self.assertEqual(context['profit_margin'], float(self.profit_margin))
+        self.assertEqual(context['interest_rate_change'], float(self.interest_rate_change))
+        self.assertEqual(context['inflation_change'], float(self.inflation_change))
+        self.assertEqual(context['growth_change'], float(self.growth_change))
+        self.assertEqual(context['asset_allocation_change'], float(self.asset_allocation_change))
+        self.assertEqual(context['risk_tolerance_change'], float(self.risk_tolerance_change))
+
+        # Check if the response status code is 200 (OK)
+        self.assertEqual(response.status_code, 200)
+
+        # Check if the response content contains specific text or elements
+        self.assertContains(response, 'Adjusted Close Price of the Stock')
+        self.assertContains(response, 'The predicted closing price')
