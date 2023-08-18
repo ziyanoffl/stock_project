@@ -24,7 +24,7 @@ def what_if(request):
     return render(request, 'what_if_scenarios.html')
 
 
-def stock_view(request):  # Define a stock_view function that takes a request and a stock symbol as arguments
+def stock_view(request):  # Define a stock_view function that takes a request
     stock = request.GET.get('stock')
     # Get the investment amount and days from the request and convert them to float and int respectively.
     # If they are None, set them to some default values.
@@ -72,7 +72,7 @@ def stock_view(request):  # Define a stock_view function that takes a request an
         copy_X=True,
         fit_intercept=True,
         n_jobs=None,
-        positive=False
+        positive=True
     )
     clf.fit(X_train, y_train)
 
@@ -251,7 +251,7 @@ def calculate_potential_profit(stock, target_profit, time_interval, investment):
         copy_X=True,
         fit_intercept=True,
         n_jobs=None,
-        positive=False
+        positive=True
     )
     clf.fit(X_train, y_train)
 
@@ -345,7 +345,7 @@ def what_if_results(request):  # Define a stock_view function that takes a reque
         copy_X=True,
         fit_intercept=True,
         n_jobs=None,
-        positive=False
+        positive=True
     )
     clf.fit(X_train, y_train)
 
