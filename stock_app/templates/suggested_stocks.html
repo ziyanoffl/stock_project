@@ -4,7 +4,7 @@
 
 {% block content %}
     <h1 class="text-center">Stock Suggestion</h1>
-    <form class="mt-4" method="GET" action="{{ find_suitable_stocks }}">
+    <form class="mt-4 needs-validation" method="GET" action="{{ find_suitable_stocks }}" novalidate>
         <div class="row">
             <div class="col-md-4">
                 <label for="investment" class="form-label">Enter investment amount:</label>

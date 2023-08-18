@@ -87,7 +87,8 @@ def stock_view(request):  # Define a stock_view function that takes a request an
     pred_dict = {"Date": [], "Prediction": []}
     for i in range(0, len(forecast)):
         pred_dict["Date"].append(dt.datetime.today() + dt.timedelta(days=i))
-        pred_dict["Prediction"].append(forecast[i])
+        # Rescale each predicted value using the same scaling factors
+        pred_dict["Prediction"].append((forecast[i] * np.std(X_train)) + np.mean(X_train))
 
     # Plot the chart for historical prices
     # Create a candlestick chart using plotly
@@ -359,7 +360,8 @@ def what_if_results(request):  # Define a stock_view function that takes a reque
     pred_dict = {"Date": [], "Prediction": []}
     for i in range(0, len(forecast)):
         pred_dict["Date"].append(dt.datetime.today() + dt.timedelta(days=i))
-        pred_dict["Prediction"].append(forecast[i])
+        # Rescale each predicted value using the same scaling factors
+        pred_dict["Prediction"].append((forecast[i] * np.std(X_train)) + np.mean(X_train))
 
     # Plot the chart for historical prices
     # Create a candlestick chart using plotly

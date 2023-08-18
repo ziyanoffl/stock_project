@@ -4,7 +4,7 @@
 
 {% block content %}
     <h1 class="text-center">Stock Price Prediction</h1>
-    <form class="mt-4" method="GET" action="{{ stock_view }}">
+    <form class="mt-4 needs-validation" method="GET" action="{{ stock_view }}" id="predictionForm" novalidate>
         <div class="row">
             <div class="col-md-4">
                 <label for="stock" class="form-label">Choose stock:</label>
@@ -36,12 +36,13 @@
                 <div class="input-group">
                     <span class="input-group-text">$</span>
                     <input type="number" class="form-control" id="investment" name="investment" value="{{ investment }}"
-                           placeholder="1000">
+                           placeholder="1000" required>
                 </div>
             </div>
             <div class="col-md-4">
                 <label for="days" class="form-label">Enter number of days:</label>
-                <input type="number" class="form-control" id="days" name="days" value="{{ days }}" placeholder="7">
+                <input type="number" class="form-control" id="days" name="days" value="{{ days }}" placeholder="7"
+                       required>
             </div>
         </div>
         <div class="row mt-3">
@@ -51,10 +52,40 @@
                     <span class="input-group-text">$</span>
                     <input type="number" class="form-control" id="profit_margin" name="profit_margin"
                            value="{{ profit_margin }}"
-                           placeholder="20">
+                           placeholder="20" required>
                 </div>
             </div>
         </div>
         <button type="submit" class="btn btn-primary mt-3">Predict</button>
     </form>
+
+    <script>
+        function validateForm() {
+            var stockInput = document.getElementById("stock");
+            var investmentInput = document.getElementById("investment");
+            var daysInput = document.getElementById("days");
+            var profitMarginInput = document.getElementById("profit_margin");
+
+            var valid = true;
+
+            if (stockInput.value === "") {
+                valid = false;
+            }
+
+            if (investmentInput.value === "") {
+                valid = false;
+            }
+
+            if (daysInput.value === "") {
+                valid = false;
+            }
+
+            if (profitMarginInput.value === "") {
+                valid = false;
+            }
+
+            return valid;
+        }
+    </script>
+
 {% endblock %}
