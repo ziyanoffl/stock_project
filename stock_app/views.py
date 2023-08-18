@@ -7,7 +7,8 @@ import yfinance as yf  # Import the yfinance module
 from django.http import HttpResponseNotFound
 from django.shortcuts import render  # Import the HttpResponse and render classes
 from plotly.offline import plot
-from sklearn import preprocessing, model_selection
+from sklearn import preprocessing, model_selection, svm
+from sklearn.ensemble import VotingRegressor
 from sklearn.linear_model import LinearRegression  # Import the LinearRegression class
 from django.template.response import TemplateResponse
 
@@ -60,27 +61,48 @@ def stock_view(request):  # Define a stock_view function that takes a request
 
     # Splitting data for Test and Train
     X = np.array(df_ml.drop(['Prediction'], axis=1))
-    X = preprocessing.scale(X)
+    # Create a preprocessing object
+    scaler = preprocessing.StandardScaler()
+
+    # Fit and transform X
+    X = scaler.fit_transform(X)
+
     X_forecast = X[-forecast_out:]
+
     X = X[:-forecast_out]
     y = np.array(df_ml['Prediction'])
     y = y[:-forecast_out]
     X_train, X_test, y_train, y_test = model_selection.train_test_split(X, y, test_size=0.2)
 
-    # Applying Linear Regression
-    clf = LinearRegression(
+    # Create and fit a linear regression model on the training data
+    lr = LinearRegression(
         copy_X=True,
         fit_intercept=True,
         n_jobs=None,
         positive=True
     )
-    clf.fit(X_train, y_train)
+
+    lr.fit(X_train, y_train)
+
+    # Create and fit a SVR model on the training data
+    svr = svm.SVR(C=1, gamma=0.1, epsilon=0.01)
+
+    svr.fit(X_train, y_train)
+
+    # Create an ensemble model by averaging the predictions of the linear regression and random forest models
+    ensemble = VotingRegressor(
+        estimators=[('lr', lr), ('svr', svr)],
+        weights=None,
+        n_jobs=None
+    )
+
+    ensemble.fit(X_train, y_train)
 
     # Prediction Score
     # confidence = clf.score(X_test, y_test)
 
     # Predicting for 'n' days stock data
-    forecast_prediction = clf.predict(X_forecast)
+    forecast_prediction = ensemble.predict(X_forecast)
     forecast = forecast_prediction.tolist()
 
     # Evaluate the model performance
@@ -88,7 +110,7 @@ def stock_view(request):  # Define a stock_view function that takes a request
     for i in range(0, len(forecast)):
         pred_dict["Date"].append(dt.datetime.today() + dt.timedelta(days=i))
         # Rescale each predicted value using the same scaling factors
-        pred_dict["Prediction"].append((forecast[i] * np.std(X_train)) + np.mean(X_train))
+        pred_dict["Prediction"].append((forecast[i]))
 
     # Plot the chart for historical prices
     # Create a candlestick chart using plotly
@@ -128,14 +150,7 @@ def stock_view(request):  # Define a stock_view function that takes a request
     forecast = forecast_prediction.tolist()
 
     # Get the last predicted value
-    last_prediction = forecast[-1]
-
-    # Get the standard deviation and mean of the original scaled data (X_train)
-    std_train = np.std(X_train)
-    mean_train = np.mean(X_train)
-
-    # Rescale the last predicted value using the same scaling factors
-    price_sold = (last_prediction * std_train) + mean_train
+    price_sold = forecast[-1]
 
     # Calculations
     shares = investment / price_invested  # Number of shares bought with the investment
@@ -239,24 +254,48 @@ def calculate_potential_profit(stock, target_profit, time_interval, investment):
 
     # Splitting data for Test and Train
     X = np.array(df_ml.drop(['Prediction'], axis=1))
-    X = preprocessing.scale(X)
+
+    # Create a preprocessing object
+    scaler = preprocessing.StandardScaler()
+
+    # Fit and transform X
+    X = scaler.fit_transform(X)
+
     X_forecast = X[-forecast_out:]
     X = X[:-forecast_out]
     y = np.array(df_ml['Prediction'])
     y = y[:-forecast_out]
     X_train, X_test, y_train, y_test = model_selection.train_test_split(X, y, test_size=0.2)
 
-    # Applying Linear Regression
-    clf = LinearRegression(
+    # Create and fit a linear regression model on the training data
+    lr = LinearRegression(
         copy_X=True,
         fit_intercept=True,
         n_jobs=None,
         positive=True
     )
-    clf.fit(X_train, y_train)
+
+    lr.fit(X_train, y_train)
+
+    # Create and fit a SVR model on the training data
+    svr = svm.SVR(C=1, gamma=0.1, epsilon=0.01)
+
+    svr.fit(X_train, y_train)
+
+    # Create an ensemble model by averaging the predictions of the linear regression and random forest models
+    ensemble = VotingRegressor(
+        estimators=[('lr', lr), ('svr', svr)],
+        weights=None,
+        n_jobs=None
+    )
+
+    ensemble.fit(X_train, y_train)
+
+    # Prediction Score
+    # confidence = clf.score(X_test, y_test)
 
     # Predicting for 'n' days stock data
-    forecast_prediction = clf.predict(X_forecast)
+    forecast_prediction = ensemble.predict(X_forecast)
     forecast = forecast_prediction.tolist()
 
     # Get the share price when invested from yesterday's closing price which should be today's opening price
@@ -266,10 +305,7 @@ def calculate_potential_profit(stock, target_profit, time_interval, investment):
     X = np.array(df_ml['Adj Close'])
 
     # Calculate potential profit based on the model's prediction
-    last_prediction = forecast[-1]
-    std_train = np.std(X_train)
-    mean_train = np.mean(X_train)
-    price_sold = (last_prediction * std_train) + mean_train
+    price_sold = forecast[-1]
 
     shares = investment / price_invested
     potential_profit = (price_sold - price_invested) * shares
@@ -299,7 +335,7 @@ def what_if_results(request):  # Define a stock_view function that takes a reque
     interest_rate_change = float(request.GET.get('interest_rate_change', 0))
     inflation_change = float(request.GET.get('inflation_change', 0))
     growth_change = float(request.GET.get('growth_change', 0))
-    asset_allocation_change = float(request.GET.get('asset_allocation_change', 0))
+    # asset_allocation_change = float(request.GET.get('asset_allocation_change', 0))
     risk_tolerance_change = float(request.GET.get('risk_tolerance_change', 0))
 
     # Set default values for investment, days, and profit margin if they are not provided
@@ -322,10 +358,6 @@ def what_if_results(request):  # Define a stock_view function that takes a reque
     # Create a copy of the DataFrame using .loc
     df_copy = df.loc[:, :].copy()
 
-    # Adjust the stock data based on the market conditions
-    df_copy['Adj Close'] = df_copy['Adj Close'] * (1 + interest_rate_change) * (1 + inflation_change) * (
-            1 + growth_change)
-
     # Select the adjusted close column as the target variable
     df_ml = df_copy[['Adj Close']].copy()
     forecast_out = int(days)
@@ -333,27 +365,48 @@ def what_if_results(request):  # Define a stock_view function that takes a reque
 
     # Splitting data for Test and Train
     X = np.array(df_ml.drop(['Prediction'], axis=1))
-    X = preprocessing.scale(X)
+
+    # Create a preprocessing object
+    scaler = preprocessing.StandardScaler()
+
+    # Fit and transform X
+    X = scaler.fit_transform(X)
+
     X_forecast = X[-forecast_out:]
     X = X[:-forecast_out]
     y = np.array(df_ml['Prediction'])
     y = y[:-forecast_out]
     X_train, X_test, y_train, y_test = model_selection.train_test_split(X, y, test_size=0.2)
 
-    # Applying Linear Regression
-    clf = LinearRegression(
+    # Create and fit a linear regression model on the training data
+    lr = LinearRegression(
         copy_X=True,
         fit_intercept=True,
         n_jobs=None,
         positive=True
     )
-    clf.fit(X_train, y_train)
+
+    lr.fit(X_train, y_train)
+
+    # Create and fit a SVR model on the training data
+    svr = svm.SVR(C=1, gamma=0.1, epsilon=0.01)
+
+    svr.fit(X_train, y_train)
+
+    # Create an ensemble model by averaging the predictions of the linear regression and random forest models
+    ensemble = VotingRegressor(
+        estimators=[('lr', lr), ('svr', svr)],
+        weights=None,
+        n_jobs=None
+    )
+
+    ensemble.fit(X_train, y_train)
 
     # Prediction Score
     # confidence = clf.score(X_test, y_test)
 
     # Predicting for 'n' days stock data
-    forecast_prediction = clf.predict(X_forecast)
+    forecast_prediction = ensemble.predict(X_forecast)
     forecast = forecast_prediction.tolist()
 
     # Evaluate the model performance
@@ -361,7 +414,13 @@ def what_if_results(request):  # Define a stock_view function that takes a reque
     for i in range(0, len(forecast)):
         pred_dict["Date"].append(dt.datetime.today() + dt.timedelta(days=i))
         # Rescale each predicted value using the same scaling factors
-        pred_dict["Prediction"].append((forecast[i] * np.std(X_train)) + np.mean(X_train))
+        pred_dict["Prediction"].append(forecast[i])
+
+    # Adjust the predicted prices based on the market conditions
+    for i in range(0, len(pred_dict["Prediction"])):
+        # Adjust each predicted price using the formula
+        pred_dict["Prediction"][i] = pred_dict["Prediction"][i] * (1 + growth_change) / (1 + inflation_change) / (
+                    1 + interest_rate_change)
 
     # Plot the chart for historical prices
     # Create a candlestick chart using plotly
@@ -394,30 +453,17 @@ def what_if_results(request):  # Define a stock_view function that takes a reque
     # Get the share price when invested from yesterday's closing price which should be today's opening price
     price_invested = df.iloc[-1]['Adj Close']
 
-    # Assuming X is a numpy array that stores the original data
-    X = np.array(df_ml['Adj Close'])
-
-    # Assuming forecast is a list that stores the scaled predictions
-    forecast = forecast_prediction.tolist()
-
     # Get the last predicted value
-    last_prediction = forecast[-1]
+    price_sold = pred_dict["Prediction"][-1]
 
-    # Get the standard deviation and mean of the original scaled data (X_train)
-    std_train = np.std(X_train)
-    mean_train = np.mean(X_train)
-
-    # Rescale the last predicted value using the same scaling factors
-    price_sold = (last_prediction * std_train) + mean_train
-
-    # Adjust investment strategy based on asset allocation and risk tolerance changes
-    investment *= (1 + asset_allocation_change) * (1 + risk_tolerance_change)
+    # Adjust investment strategy based risk tolerance changes
+    investment *= (1 + risk_tolerance_change)
 
     # Calculations
     shares = investment / price_invested  # Number of shares bought with the investment
     profit_loss = (price_sold - price_invested) * shares  # Profit or loss amount
     profit_loss_percent = abs(profit_loss / investment) * 100  # Profit or loss percentage
-    final_value = price_sold * shares
+    final_value = price_sold * shares  # Final value of the investment
 
     # Create a list of results to pass to the template.
     results = [round(price_invested, 2), round(price_sold, 2), round(final_value, 2), round(profit_loss, 2),
@@ -440,7 +486,7 @@ def what_if_results(request):  # Define a stock_view function that takes a reque
         'interest_rate_change': interest_rate_change,
         'inflation_change': inflation_change,
         'growth_change': growth_change,
-        'asset_allocation_change': asset_allocation_change,
+        # 'asset_allocation_change': asset_allocation_change,
         'risk_tolerance_change': risk_tolerance_change,
     }
     # Render the template with the context using the render function.

@@ -103,14 +103,6 @@
             </div>
             <div class="row mt-4">
                 <div class="col-md-4">
-                    <label for="asset_allocation_change" class="form-label">Enter the change in asset allocation:</label>
-                    <input type="number" step="0.01" class="form-control" id="asset_allocation_change"
-                           name="asset_allocation_change"
-                           value="{{ asset_allocation_change }}"
-                           placeholder="0.1"
-                           required>
-                </div>
-                <div class="col-md-4">
                     <label for="risk_tolerance_change" class="form-label">Enter the change in risk tolerance:</label>
                     <input type="number" step="0.01" class="form-control" id="risk_tolerance_change"
                            name="risk_tolerance_change"
@@ -142,8 +134,10 @@
                         </div>
                     {% endif %}
                 {% elif profit_loss < 0 %}
-                    <p>You might make a loss of ${{ profit_loss }}, which is {{ profit_loss_percent }}% of your
-                        investment.</p>
+                    <div class="alert alert-danger">
+                        You might make a loss of ${{ profit_loss }}, which is {{ profit_loss_percent }}% of your
+                        investment.
+                    </div>
                 {% else %}
                     <p>You broke even.</p>
                 {% endif %}
