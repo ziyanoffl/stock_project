@@ -6,11 +6,11 @@ import plotly.graph_objects as go
 import yfinance as yf  # Import the yfinance module
 from django.http import HttpResponseNotFound
 from django.shortcuts import render  # Import the HttpResponse and render classes
+from django.template.response import TemplateResponse
 from plotly.offline import plot
 from sklearn import preprocessing, model_selection, svm
 from sklearn.ensemble import VotingRegressor
 from sklearn.linear_model import LinearRegression  # Import the LinearRegression class
-from django.template.response import TemplateResponse
 
 
 def home_view(request):
@@ -420,7 +420,7 @@ def what_if_results(request):  # Define a stock_view function that takes a reque
     for i in range(0, len(pred_dict["Prediction"])):
         # Adjust each predicted price using the formula
         pred_dict["Prediction"][i] = pred_dict["Prediction"][i] * (1 + growth_change) / (1 + inflation_change) / (
-                    1 + interest_rate_change)
+                1 + interest_rate_change)
 
     # Plot the chart for historical prices
     # Create a candlestick chart using plotly
