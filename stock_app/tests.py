@@ -78,7 +78,6 @@ class TestWhatIfResultsView(TestCase):
         self.interest_rate_change = 0.01
         self.inflation_change = 0.02
         self.growth_change = 0.03
-        self.asset_allocation_change = 0.04
         self.risk_tolerance_change = 0.05
 
     def test_what_if_results(self):
@@ -90,7 +89,6 @@ class TestWhatIfResultsView(TestCase):
             'interest_rate_change': self.interest_rate_change,
             'inflation_change': self.inflation_change,
             'growth_change': self.growth_change,
-            'asset_allocation_change': self.asset_allocation_change,
             'risk_tolerance_change': self.risk_tolerance_change,
         })
         response = what_if_results(request)
@@ -105,7 +103,6 @@ class TestWhatIfResultsView(TestCase):
         self.assertEqual(context['interest_rate_change'], float(self.interest_rate_change))
         self.assertEqual(context['inflation_change'], float(self.inflation_change))
         self.assertEqual(context['growth_change'], float(self.growth_change))
-        self.assertEqual(context['asset_allocation_change'], float(self.asset_allocation_change))
         self.assertEqual(context['risk_tolerance_change'], float(self.risk_tolerance_change))
 
         # Check if the response status code is 200 (OK)
