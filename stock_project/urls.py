@@ -5,5 +5,3 @@ urlpatterns = [
 ]
 handler500 = 'stock_app.views.server_error'
 handler404 = 'stock_app.views.page_not_found'
-
-
