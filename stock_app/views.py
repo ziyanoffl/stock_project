@@ -17,6 +17,14 @@ def home_view(request):
     return render(request, 'home.html')
 
 
+def server_error(request):
+    return render(request, 'error_page.html', status=500)
+
+
+def page_not_found(request, exception):
+    return render(request, '404.html', status=404)
+
+
 def stock_suggestion(request):
     return render(request, 'suggested_stocks.html')
 
@@ -168,6 +176,8 @@ def stock_view(request):  # Define a stock_view function that takes a request
 
     df_latest = df_latest.round(2)
 
+    shares = shares.round(4)
+
     # Create a context dictionary to pass to the template.
     context = {
         'stock': stock,
@@ -183,6 +193,7 @@ def stock_view(request):  # Define a stock_view function that takes a request
         # 'predicted_chart': 'predicted_prices.png',
         'df_latest': df_latest,
         'profit_margin': profit_margin,
+        'bought_shares': shares,
     }
 
     # Render the template with the context using the render function.
@@ -471,6 +482,8 @@ def what_if_results(request):  # Define a stock_view function that takes a reque
 
     df_latest = df.tail(5).round(2)
 
+    shares = shares.round(4)
+
     # Create a context dictionary to pass to the template.
     context = {
         'stock': stock,
@@ -488,6 +501,7 @@ def what_if_results(request):  # Define a stock_view function that takes a reque
         'growth_change': growth_change,
         # 'asset_allocation_change': asset_allocation_change,
         'risk_tolerance_change': risk_tolerance_change,
+        'bought_shares': shares,
     }
     # Render the template with the context using the render function.
     return TemplateResponse(request, 'what_if_scenarios.html', context)

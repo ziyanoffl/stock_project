@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-md-4">
                 <label for="stock" class="form-label">Enter stock symbol:</label>
-                <select class="form-control" id="stock" name="stock">
+                <select class="form-control form-select" id="stock" name="stock">
                     <option value="AAPL" {% if stock == 'AAPL' %}selected{% endif %}>Apple Inc. (AAPL)</option>
                     <option value="MSFT" {% if stock == 'MSFT' %}selected{% endif %}>Microsoft Corporation (MSFT)
                     </option>
@@ -41,7 +41,52 @@
                     </option>
                     <option value="NVO" {% if stock == 'NVO' %}selected{% endif %}>Novo Nordisk A/S (NVO)</option>
                     <option value="MA" {% if stock == 'MA' %}selected{% endif %}>Mastercard Incorporated (MA)</option>
+                    <option value="PG" {% if stock == 'PG' %}selected{% endif %}>Procter & Gamble Company (PG)</option>
+                    <option value="AVGO" {% if stock == 'AVGO' %}selected{% endif %}>Broadcom Inc. (AVGO)</option>
+                    <option value="005930.KS" {% if stock == '005930.KS' %}selected{% endif %}>Samsung Electronics Co.,
+                        Ltd. (005930.KS)
+                    </option>
+                    <option value="HD" {% if stock == 'HD' %}selected{% endif %}>The Home Depot, Inc. (HD)</option>
+                    <option value="600519.SS" {% if stock == '600519.SS' %}selected{% endif %}>Kweichow Moutai Co., Ltd.
+                        (600519.SS)
+                    </option>
+                    <option value="NESN.SW" {% if stock == 'NESN.SW' %}selected{% endif %}>Nestlé S.A. (NESN.SW)
+                    </option>
+                    <option value="ORCL" {% if stock == 'ORCL' %}selected{% endif %}>Oracle Corporation (ORCL)</option>
+                    <option value="CVX" {% if stock == 'CVX' %}selected{% endif %}>Chevron Corporation (CVX)</option>
+                    <option value="MRK" {% if stock == 'MRK' %}selected{% endif %}>Merck & Co., Inc. (MRK)</option>
+                    <option value="ABBV" {% if stock == 'ABBV' %}selected{% endif %}>AbbVie Inc. (ABBV)</option>
+                    <option value="KO" {% if stock == 'KO' %}selected{% endif %}>The Coca-Cola Company (KO)</option>
+                    <option value="ASML" {% if stock == 'ASML' %}selected{% endif %}>ASML Holding N.V. (ASML)</option>
+                    <option value="PEP" {% if stock == 'PEP' %}selected{% endif %}>PepsiCo, Inc. (PEP)</option>
+                    <option value="COST" {% if stock == 'COST' %}selected{% endif %}>Costco Wholesale Corporation
+                        (COST)
+                    </option>
+                    <option value="OR.PA" {% if stock == 'OR.PA' %}selected{% endif %}>L'Oréal S.A. (OR.PA)</option>
+                    <option value="IHC.AE" {% if stock == 'IHC.AE' %}selected{% endif %}>International Holding Company
+                        PJSC (IHC.AE)
+                    </option>
+                    <option value="ROG.SW" {% if stock == 'ROG.SW' %}selected{% endif %}>Roche Holding AG (ROG.SW)
+                    </option>
+                    <option value="ADBE" {% if stock == 'ADBE' %}selected{% endif %}>Adobe Inc. (ADBE)</option>
+                    <option value="BAC" {% if stock == 'BAC' %}selected{% endif %}>Bank of America Corporation (BAC)
+                    </option>
+                    <option value="BABA" {% if stock == 'BABA' %}selected{% endif %}>Alibaba Group Holding Limited
+                        (BABA)
+                    </option>
+                    <option value="RMS.PA" {% if stock == 'RMS.PA' %}selected{% endif %}>Hermès International Société en
+                        commandite par actions (RMS.PA)
+                    </option>
+                    <option value="TM" {% if stock == 'TM' %}selected{% endif %}>Toyota Motor Corporation (TM)</option>
+                    <option value="NVS" {% if stock == 'NVS' %}selected{% endif %}>Novartis AG (NVS)</option>
+                    <option value="AZN" {% if stock == 'AZN' %}selected{% endif %}>AstraZeneca PLC (AZN)</option>
+                    <option value="CSCO" {% if stock == 'CSCO' %}selected{% endif %}>Cisco Systems, Inc. (CSCO)</option>
+                    <option value="RELIANCE.NS" {% if stock == 'RELIANCE.NS' %}selected{% endif %}>Reliance Industries
+                        Limited (RELIANCE.NS)
+                    </option>
+                    <option value="MCD" {% if stock == 'MCD' %}selected{% endif %}>McDonald's Corporation (MCD)</option>
                 </select>
+
             </div>
             <div class="col-md-4">
                 <label for="investment" class="form-label">Enter investment amount:</label>
@@ -120,10 +165,31 @@
         <div class="mt-5 row">
             <div class="col-md-6" style="float: left;">
                 {#        <p>R2 score: {{ R2 }}</p>#}
-                <p>You invested ${{ investment }} in {{ stock }} stock for {{ days }} days.</p>
-                <p>The buying price for today is: ${{ results.0 }}.</p>
-                <p>The predicted closing price for {{ days }} days later is ${{ results.1 }}.</p>
-                <p>You get ${{ results.2 }} when you sell your shares.</p>
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <td colspan="2">
+                            You invested ${{ investment }} in {{ stock }} stock for {{ days }} days.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Buying Price for Today:</td>
+                        <td>${{ results.0 }}</td>
+                    </tr>
+                    <tr>
+                        <td>No. of Shares that you bought:</td>
+                        <td>{{ bought_shares }} shares</td>
+                    </tr>
+                    <tr>
+                        <td>Predicted Closing Price in {{ days }} days:</td>
+                        <td>${{ results.1 }}</td>
+                    </tr>
+                    <tr>
+                        <td>You Get:</td>
+                        <td>${{ results.2 }} when you sell your shares.</td>
+                    </tr>
+                    </tbody>
+                </table>
 
                 {% if profit_loss > 0 %}
                     <p>You might make a profit of ${{ profit_loss }}, which is {{ profit_loss_percent }}% of your

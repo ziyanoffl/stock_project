@@ -13,7 +13,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}My Website{% endblock %}</title>
     <!-- Include Bootstrap 5 CSS -->
-    <link rel="stylesheet" href="{% static 'bootstrap.css' %}">
+    {#    <link rel="stylesheet" href="{% static 'bootstrap.css' %}">#}
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css">
+    <style>
+        html {
+            position: relative;
+            min-height: 100%;
+        }
+
+        body {
+            margin-bottom: 60px; /* Height of the footer */
+        }
+
+        .footer {
+            position: absolute;
+            margin-top: 10px;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+
 </head>
 <body>
 <!-- Navbar -->
@@ -79,5 +98,16 @@
         }
     }
 </script>
+<!-- Footer -->
+<br>
+<footer class="bg-dark text-light py-3 footer">
+    <div class="container text-center">
+        {#        <p class="mb-0">Use the software at your own risk. The author and all affiliates assume no responsibility for#}
+        {#            your trading results.</p>#}
+        <p class="mb-0">&copy; All Rights Reserved by M.R.M. Ziyan</p>
+    </div>
+</footer>
+
+
 </body>
 </html>
