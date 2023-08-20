@@ -420,7 +420,7 @@ def what_if_results(request):  # Define a stock_view function that takes a reque
     forecast_prediction = ensemble.predict(X_forecast)
     forecast = forecast_prediction.tolist()
 
-    # Evaluate the model performance
+    # Add dates for predictions
     pred_dict = {"Date": [], "Prediction": []}
     for i in range(0, len(forecast)):
         pred_dict["Date"].append(dt.datetime.today() + dt.timedelta(days=i))
