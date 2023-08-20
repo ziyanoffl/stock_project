@@ -1,22 +1,26 @@
 # Follow instructions to run the application on your PC
+
 ## Requirements
-1. Python 3.10
+- Python 3.10
 
 ## Run application using Django
-### Run the following commands to install requirements and create Virtual Environment
-1. Run "python -m venv venv"
-2. Activate virtual env with the command "venv/Scripts/activate"
-3. Run "pip install -r requirements.txt"
+### Setup
 
-### Run application
-1. Run "python manage.py runserver"
+To run this project, you need to have Python 3.10 installed on your computer. Then follow these steps:
+
+1. Clone this repository to your local machine.
+2. Create a virtual environment with the command `python -m venv venv`
+3. Activate the virtual environment with the command `venv/Scripts/activate`
+4. Install the requirements with the command `pip install -r requirements.txt`
+5. Run the application with the command `python manage.py runserver`
+6. Open your browser and go to `http://localhost:8000`
 
 # Languages and tools used for this application
-## Lanuages
-1. Python
-2. HTML & CSS
-3. JavaScript
+## Languages
+- Python
+- HTML & CSS
+- JavaScript
 
 ## Tools
-1. Django
-2. GitHub actions
+- Django
+- GitHub actions
