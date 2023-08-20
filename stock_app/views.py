@@ -51,6 +51,10 @@ def stock_view(request):  # Define a stock_view function that takes a request
 
     # Download the stock data as a pandas dataframe using the yfinance download function.
     df = yf.download(stock, period='3y', interval='1d')
+
+    # Drop rows with missing values
+    df = df.dropna()
+
     # print(df)
     np.random.seed(0)
 
@@ -249,6 +253,9 @@ def calculate_potential_profit(stock, target_profit, time_interval, investment):
     df = yf.download(stock, period='3y', interval='1d')
     # print(df)
 
+    # Drop rows with missing values
+    df = df.dropna()
+
     # Create a copy of the DataFrame using .loc
     df_copy = df.loc[:, :].copy()
 
@@ -361,6 +368,9 @@ def what_if_results(request):  # Define a stock_view function that takes a reque
 
     # Create a copy of the DataFrame using .loc
     df_copy = df.loc[:, :].copy()
+
+    # Drop rows with missing values
+    df = df.dropna()
 
     # Select the adjusted close column as the target variable
     df_ml = df_copy[['Adj Close']].copy()
