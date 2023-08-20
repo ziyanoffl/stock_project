@@ -74,7 +74,6 @@ class TestWhatIfResultsView(TestCase):
         self.stock = 'AAPL'
         self.investment = 1000
         self.days = 10
-        self.profit_margin = 20
         self.interest_rate_change = 0.01
         self.inflation_change = 0.02
         self.growth_change = 0.03
@@ -85,7 +84,6 @@ class TestWhatIfResultsView(TestCase):
             'stock': self.stock,
             'investment': self.investment,
             'days': self.days,
-            'profit_margin': self.profit_margin,
             'interest_rate_change': self.interest_rate_change,
             'inflation_change': self.inflation_change,
             'growth_change': self.growth_change,
@@ -99,7 +97,6 @@ class TestWhatIfResultsView(TestCase):
         context = response.context_data
         self.assertEqual(context['stock'], self.stock)
         self.assertEqual(context['days'], int(self.days))
-        self.assertEqual(context['profit_margin'], float(self.profit_margin))
         self.assertEqual(context['interest_rate_change'], float(self.interest_rate_change))
         self.assertEqual(context['inflation_change'], float(self.inflation_change))
         self.assertEqual(context['growth_change'], float(self.growth_change))
