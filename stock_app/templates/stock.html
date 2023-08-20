@@ -103,18 +103,6 @@
                 <input type="number" class="form-control" id="days" name="days" value="{{ days }}" required>
             </div>
         </div>
-        <div class="row mt-3">
-            <div class="col-md-4">
-                <label for="profit_margin" class="form-label">Enter profit margin:</label>
-                <div class="input-group">
-                    <span class="input-group-text">$</span>
-                    <input type="number" class="form-control" id="profit_margin" name="profit_margin"
-                           value="{{ profit_margin }}"
-                           step="0.01"
-                           required>
-                </div>
-            </div>
-        </div>
         <button type="submit" class="btn btn-primary mt-3">Predict</button>
     </form>
 
@@ -150,13 +138,10 @@
                 </table>
 
                 {% if profit_loss > 0 %}
-                    <p>You might make a profit of ${{ profit_loss }}, which is {{ profit_loss_percent }}% of your
-                        investment.</p>
-                    {% if profit_loss > profit_margin %}
-                        <div class="alert alert-success">
-                            This stock is suggested since it fetches more profit than your profit margin
-                        </div>
-                    {% endif %}
+                    <div class="alert alert-success">
+                        You might make a profit of ${{ profit_loss }}, which is {{ profit_loss_percent }}% of your
+                        investment.
+                    </div>
                 {% elif profit_loss < 0 %}
                     <div class="alert alert-danger">
                         You might make a loss of ${{ profit_loss }}, which is {{ profit_loss_percent }}% of your

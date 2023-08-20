@@ -49,11 +49,6 @@ def stock_view(request):  # Define a stock_view function that takes a request
     else:
         days = 10  # Default number of days
 
-    if profit_margin:
-        profit_margin = float(profit_margin)
-    else:
-        profit_margin = 20
-
     # Download the stock data as a pandas dataframe using the yfinance download function.
     df = yf.download(stock, period='3y', interval='1d')
     # print(df)
@@ -192,7 +187,6 @@ def stock_view(request):  # Define a stock_view function that takes a request
         'historical_plot': historical_plot,
         # 'predicted_chart': 'predicted_prices.png',
         'df_latest': df_latest,
-        'profit_margin': profit_margin,
         'bought_shares': shares,
     }
 
@@ -340,7 +334,6 @@ def what_if_results(request):  # Define a stock_view function that takes a reque
     stock = request.GET.get('stock')
     investment = request.GET.get('investment')
     days = request.GET.get('days')
-    profit_margin = request.GET.get('profit_margin')
 
     # Get the "What-If" scenario inputs from the request
     interest_rate_change_old = float(request.GET.get('interest_rate_change', 0))
@@ -362,10 +355,6 @@ def what_if_results(request):  # Define a stock_view function that takes a reque
         days = int(days)
     else:
         days = 10  # Default number of days
-    if profit_margin:
-        profit_margin = float(profit_margin)
-    else:
-        profit_margin = 20
 
     # Download the stock data as a pandas dataframe using the yfinance.download function
     df = yf.download(stock, period='3y', interval='1d')
@@ -499,7 +488,6 @@ def what_if_results(request):  # Define a stock_view function that takes a reque
         'plot_div_pred': plot_div_pred,
         'historical_plot': historical_plot,
         'df_latest': df_latest,
-        'profit_margin': profit_margin,
         'interest_rate_change': interest_rate_change_old,
         'inflation_change': inflation_change_old,
         'growth_change': growth_change_old,

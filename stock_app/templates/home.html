@@ -73,17 +73,6 @@
                        required>
             </div>
         </div>
-        <div class="row mt-3">
-            <div class="col-md-4">
-                <label for="profit_margin" class="form-label">Enter profit margin:</label>
-                <div class="input-group">
-                    <span class="input-group-text">$</span>
-                    <input type="number" class="form-control" id="profit_margin" name="profit_margin"
-                           value="{{ profit_margin }}"
-                           placeholder="20" required>
-                </div>
-            </div>
-        </div>
         <button type="submit" class="btn btn-primary mt-3">Predict</button>
     </form>
 
@@ -105,10 +94,6 @@
             }
 
             if (daysInput.value === "") {
-                valid = false;
-            }
-
-            if (profitMarginInput.value === "") {
                 valid = false;
             }
 
