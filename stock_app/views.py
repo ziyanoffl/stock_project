@@ -343,11 +343,15 @@ def what_if_results(request):  # Define a stock_view function that takes a reque
     profit_margin = request.GET.get('profit_margin')
 
     # Get the "What-If" scenario inputs from the request
-    interest_rate_change = float(request.GET.get('interest_rate_change', 0))
-    inflation_change = float(request.GET.get('inflation_change', 0))
-    growth_change = float(request.GET.get('growth_change', 0))
-    # asset_allocation_change = float(request.GET.get('asset_allocation_change', 0))
-    risk_tolerance_change = float(request.GET.get('risk_tolerance_change', 0))
+    interest_rate_change_old = float(request.GET.get('interest_rate_change', 0))
+    inflation_change_old = float(request.GET.get('inflation_change', 0))
+    growth_change_old = float(request.GET.get('growth_change', 0))
+    risk_tolerance_change_old = float(request.GET.get('risk_tolerance_change', 0))
+
+    interest_rate_change = interest_rate_change_old / 100
+    inflation_change = inflation_change_old / 100
+    growth_change = growth_change_old / 100
+    risk_tolerance_change = risk_tolerance_change_old / 100
 
     # Set default values for investment, days, and profit margin if they are not provided
     if investment:
@@ -496,11 +500,10 @@ def what_if_results(request):  # Define a stock_view function that takes a reque
         'historical_plot': historical_plot,
         'df_latest': df_latest,
         'profit_margin': profit_margin,
-        'interest_rate_change': interest_rate_change,
-        'inflation_change': inflation_change,
-        'growth_change': growth_change,
-        # 'asset_allocation_change': asset_allocation_change,
-        'risk_tolerance_change': risk_tolerance_change,
+        'interest_rate_change': interest_rate_change_old,
+        'inflation_change': inflation_change_old,
+        'growth_change': growth_change_old,
+        'risk_tolerance_change': risk_tolerance_change_old,
         'bought_shares': shares,
     }
     # Render the template with the context using the render function.

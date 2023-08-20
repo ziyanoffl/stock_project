@@ -90,9 +90,9 @@
 <script>
     function validateInput(input) {
         const value = parseFloat(input.value);
-        if (isNaN(value) || value < 0 || value > 1) {
+        if (isNaN(value) || value < 0 || value > 100) {
             input.value = '';
-            input.setCustomValidity('Please enter a value between 0 and 1.');
+            input.setCustomValidity('Please enter a value between 0 and 100.');
         } else {
             input.setCustomValidity('');
         }

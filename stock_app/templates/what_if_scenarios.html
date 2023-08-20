@@ -95,12 +95,13 @@
                     <input type="number" class="form-control" id="investment" name="investment"
                            value="{{ investment }}"
                            step="0.01"
+                           placeholder="1000"
                            required>
                 </div>
             </div>
             <div class="col-md-4">
                 <label for="days" class="form-label">Enter number of days:</label>
-                <input type="number" class="form-control" id="days" name="days" value="{{ days }}" required>
+                <input type="number" class="form-control" id="days" name="days" value="{{ days }}" placeholder="7" required>
             </div>
         </div>
         <div class="row mt-3">
@@ -111,6 +112,7 @@
                     <input type="number" class="form-control" id="profit_margin" name="profit_margin"
                            value="{{ profit_margin }}"
                            step="0.01"
+                           placeholder="10"
                            required>
                 </div>
             </div>
@@ -119,44 +121,59 @@
         <div class="row mt-3">
             <h5>What-if scenarios</h5>
             <div class="alert alert-primary">
-                Please enter values from 0.00 to 1.00 (From 0% to 100%)
+                Please enter values from 0.00 to 100 (From 0% to 100%)
             </div>
             <div class="row">
                 <div class="col-md-4">
                     <label for="interest_rate_change" class="form-label">Enter the change in interest rates:</label>
-                    <input type="number" step="0.01" class="form-control" id="interest_rate_change"
-                           name="interest_rate_change"
-                           value="{{ interest_rate_change }}"
-                           placeholder="0.1"
-                           oninput="validateInput(this);"
-                           required>
+                    <div class="input-group">
+                        <input type="number" step="0.01" class="form-control" id="interest_rate_change"
+                               name="interest_rate_change"
+                               value="{{ interest_rate_change }}"
+                               placeholder="1"
+                               oninput="validateInput(this);"
+                               required>
+                        <span class="input-group-text">%</span>
+                    </div>
                 </div>
                 <div class="col-md-4">
                     <label for="inflation_change" class="form-label">Enter the change in inflation:</label>
-                    <input type="number" step="0.01" class="form-control" id="inflation_change" name="inflation_change"
-                           value="{{ inflation_change }}"
-                           placeholder="0.1"
-                           required>
+                    <div class="input-group">
+                        <input type="number" step="0.01" class="form-control" id="inflation_change"
+                               name="inflation_change"
+                               value="{{ inflation_change }}"
+                               placeholder="1"
+                               oninput="validateInput(this);"
+                               required>
+                        <span class="input-group-text">%</span>
+                    </div>
                 </div>
                 <div class="col-md-4">
                     <label for="growth_change" class="form-label">Enter the change in economic growth:</label>
-                    <input type="number" step="0.01" class="form-control" id="growth_change" name="growth_change"
-                           value="{{ growth_change }}"
-                           placeholder="0.1"
-                           required>
+                    <div class="input-group">
+                        <input type="number" step="0.01" class="form-control" id="growth_change" name="growth_change"
+                               value="{{ growth_change }}"
+                               placeholder="1"
+                               oninput="validateInput(this);"
+                               required>
+                        <span class="input-group-text">%</span>
+                    </div>
                 </div>
             </div>
             <div class="row mt-4">
                 <div class="col-md-4">
                     <label for="risk_tolerance_change" class="form-label">Enter the change in risk tolerance:</label>
-                    <input type="number" step="0.01" class="form-control" id="risk_tolerance_change"
-                           name="risk_tolerance_change"
-                           value="{{ risk_tolerance_change }}"
-                           placeholder="0.1"
-                           required>
+                    <div class="input-group">
+                        <input type="number" step="0.01" class="form-control" id="risk_tolerance_change"
+                               name="risk_tolerance_change"
+                               value="{{ risk_tolerance_change }}"
+                               placeholder="1"
+                               oninput="validateInput(this);"
+                               required>
+                        <span class="input-group-text">%</span>
+                    </div>
                 </div>
             </div>
-
         </div>
         <button type="submit" class="btn btn-primary mt-3">Predict</button>
     </form>
