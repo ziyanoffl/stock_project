@@ -93,7 +93,7 @@ def stock_view(request):  # Define a stock_view function that takes a request
     lr.fit(X_train, y_train)
 
     # Create and fit a SVR model on the training data
-    svr = svm.SVR(C=1, gamma=0.1, epsilon=0.01)
+    svr = svm.SVR(C=100, gamma=1)
 
     svr.fit(X_train, y_train)
 
@@ -289,7 +289,7 @@ def calculate_potential_profit(stock, target_profit, time_interval, investment):
     lr.fit(X_train, y_train)
 
     # Create and fit a SVR model on the training data
-    svr = svm.SVR(C=1, gamma=0.1, epsilon=0.01)
+    svr = svm.SVR(C=100, gamma=1)
 
     svr.fit(X_train, y_train)
 
@@ -400,7 +400,7 @@ def what_if_results(request):  # Define a stock_view function that takes a reque
     lr.fit(X_train, y_train)
 
     # Create and fit a SVR model on the training data
-    svr = svm.SVR(C=1, gamma=0.1, epsilon=0.01)
+    svr = svm.SVR(C=100, gamma=1)
 
     svr.fit(X_train, y_train)
 
@@ -430,8 +430,8 @@ def what_if_results(request):  # Define a stock_view function that takes a reque
     # Adjust the predicted prices based on the market conditions
     for i in range(0, len(pred_dict["Prediction"])):
         # Adjust each predicted price using the formula
-        pred_dict["Prediction"][i] = pred_dict["Prediction"][i] * (1 + growth_change) / (1 + inflation_change) / (
-                1 + interest_rate_change)
+        pred_dict["Prediction"][i] = pred_dict["Prediction"][i] * (1 + growth_change) * (1 - inflation_change) * (
+                1 - interest_rate_change)
 
     # Plot the chart for historical prices
     # Create a candlestick chart using plotly
