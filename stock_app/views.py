@@ -39,7 +39,7 @@ def stock_view(request):  # Define a stock_view function that takes a request
     # If they are None, set them to some default values.
     investment = request.GET.get('investment')
     days = request.GET.get('days')
-    profit_margin = request.GET.get('profit_margin')
+
     if investment:
         investment = float(investment)
     else:
@@ -330,7 +330,7 @@ def calculate_potential_profit(stock, target_profit, time_interval, investment):
 
 def what_if_results(request):  # Define a stock_view function that takes a request and a stock symbol as arguments
     np.random.seed(0)
-    # Get the stock symbol, investment amount, days, and profit margin from the request
+    # Get the stock symbol, investment amount, days from the request
     stock = request.GET.get('stock')
     investment = request.GET.get('investment')
     days = request.GET.get('days')
@@ -346,7 +346,7 @@ def what_if_results(request):  # Define a stock_view function that takes a reque
     growth_change = growth_change_old / 100
     risk_tolerance_change = risk_tolerance_change_old / 100
 
-    # Set default values for investment, days, and profit margin if they are not provided
+    # Set default values for investment, and days if they are not provided
     if investment:
         investment = float(investment)
     else:

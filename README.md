@@ -2,6 +2,7 @@
 
 ## Requirements
 - Python 3.10
+- Active internet connection for YahooFinance
 
 ## Run application using Django
 ### Setup
