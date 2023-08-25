@@ -50,7 +50,7 @@ def stock_view(request):  # Define a stock_view function that takes a request
         days = 10  # Default number of days
 
     # Download the stock data as a pandas dataframe using the yfinance download function.
-    df = yf.download(stock, period='3y', interval='1d')
+    df = yf.download(stock, period='3y', interval='1d', actions=False)
 
     # Drop rows with missing values
     df = df.dropna()
@@ -220,7 +220,7 @@ def find_suitable_stocks(request):
 
     # Define a list of stock symbols to consider
     stock_symbols = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TCEHY', 'NVDA', 'TSLA', 'BRK-B', 'META', 'TSM', 'V', 'LLY',
-                     'UNH', 'MC.PA', 'JNJ', 'JPM', 'XOM', 'WMT', 'NVO', 'MA']
+                     'UNH', 'MC.PA', 'BABA', 'JPM', 'XOM', 'WMT', 'NVO', 'MA']
 
     suitable_stocks = []
 
@@ -250,7 +250,7 @@ def find_suitable_stocks(request):
 def calculate_potential_profit(stock, target_profit, time_interval, investment):
     # Your existing code for data fetching and model training
     # Replace 'end' parameter with yesterday's date
-    df = yf.download(stock, period='3y', interval='1d')
+    df = yf.download(stock, period='3y', interval='1d', actions=False)
     # print(df)
 
     # Drop rows with missing values
@@ -364,7 +364,7 @@ def what_if_results(request):  # Define a stock_view function that takes a reque
         days = 10  # Default number of days
 
     # Download the stock data as a pandas dataframe using the yfinance.download function
-    df = yf.download(stock, period='3y', interval='1d')
+    df = yf.download(stock, period='3y', interval='1d', actions=False)
 
     # Create a copy of the DataFrame using .loc
     df_copy = df.loc[:, :].copy()
