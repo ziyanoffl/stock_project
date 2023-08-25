@@ -92,7 +92,7 @@ def stock_view(request):  # Define a stock_view function that takes a request
     lr.fit(X_train, y_train)
 
     # Create and fit a SVR model on the training data
-    svr = svm.SVR(C=100, gamma=1)
+    svr = svm.SVR(C=1, gamma=0.1)
 
     svr.fit(X_train, y_train)
 
@@ -290,7 +290,7 @@ def calculate_potential_profit(stock, target_profit, time_interval, investment):
     lr.fit(X_train, y_train)
 
     # Create and fit a SVR model on the training data
-    svr = svm.SVR(C=100, gamma=1)
+    svr = svm.SVR(C=1, gamma=0.1)
 
     svr.fit(X_train, y_train)
 
@@ -403,7 +403,7 @@ def what_if_results(request):  # Define a stock_view function that takes a reque
     lr.fit(X_train, y_train)
 
     # Create and fit a SVR model on the training data
-    svr = svm.SVR(C=100, gamma=1)
+    svr = svm.SVR(C=1, gamma=0.1)
 
     svr.fit(X_train, y_train)
 
