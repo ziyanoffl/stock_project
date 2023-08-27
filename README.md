@@ -16,6 +16,14 @@ To run this project, you need to have Python 3.10 installed on your computer. Th
 5. Run the application with the command `python manage.py runserver`
 6. Open your browser and go to `http://localhost:8000`
 
+# Some screenshots
+![image](https://github.com/ziyanoffl/stock_project/assets/86348725/9cb82400-cea9-4b62-b8ad-933262e5171c)
+![image](https://github.com/ziyanoffl/stock_project/assets/86348725/c6b9118b-f762-4319-8801-5fdbedd18590)
+![image](https://github.com/ziyanoffl/stock_project/assets/86348725/51c7afcb-bda8-42bc-8cb1-09cf3bf301a4)
+![image](https://github.com/ziyanoffl/stock_project/assets/86348725/1a22e7f7-babd-4340-ba08-a784973e864c)
+![image](https://github.com/ziyanoffl/stock_project/assets/86348725/35f34c36-cc7c-4801-ad3a-0f04382b5de5)
+
+
 # Languages and tools used for this application
 ## Languages
 - Python
