@@ -17,11 +17,12 @@ To run this project, you need to have Python 3.10 installed on your computer. Th
 6. Open your browser and go to `http://localhost:8000`
 
 # Some screenshots
-![image](https://github.com/ziyanoffl/stock_project/assets/86348725/9cb82400-cea9-4b62-b8ad-933262e5171c)
-![image](https://github.com/ziyanoffl/stock_project/assets/86348725/c6b9118b-f762-4319-8801-5fdbedd18590)
-![image](https://github.com/ziyanoffl/stock_project/assets/86348725/51c7afcb-bda8-42bc-8cb1-09cf3bf301a4)
-![image](https://github.com/ziyanoffl/stock_project/assets/86348725/1a22e7f7-babd-4340-ba08-a784973e864c)
-![image](https://github.com/ziyanoffl/stock_project/assets/86348725/35f34c36-cc7c-4801-ad3a-0f04382b5de5)
+![image](https://github.com/ziyanoffl/stock_project/assets/86348725/8e79431b-9541-4687-850e-edd81454189d)
+![image](https://github.com/ziyanoffl/stock_project/assets/86348725/ca8e37cf-67a6-48f3-895c-fd1967c725a4)
+![image](https://github.com/ziyanoffl/stock_project/assets/86348725/834678ce-1625-4543-ae1d-8069070ef168)
+![image](https://github.com/ziyanoffl/stock_project/assets/86348725/fd31ef8f-c9d7-4ec3-a373-03136fe36529)
+![image](https://github.com/ziyanoffl/stock_project/assets/86348725/fbab0405-0253-4f91-bbe0-f2dc8f0a6a82)
+
 
 
 # Languages and tools used for this application
