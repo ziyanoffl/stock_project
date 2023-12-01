@@ -219,7 +219,7 @@ def find_suitable_stocks(request):
         target_profit = 20
 
     # Define a list of stock symbols to consider
-    stock_symbols = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TCEHY', 'NVDA', 'TSLA', 'BRK-B', 'META', 'TSM', 'V', 'LLY',
+    stock_symbols = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TCEHY', 'TSLA', 'BRK-B', 'META', 'TSM', 'V', 'LLY',
                      'UNH', 'MC.PA', 'BABA', 'JPM', 'XOM', 'WMT', 'NVO', 'MA']
 
     suitable_stocks = []
